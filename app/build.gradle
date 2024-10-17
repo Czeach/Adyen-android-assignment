@@ -15,8 +15,8 @@ if (!file("local.gradle").exists()) {
 apply from: "local.gradle"
 
 android {
-    compileSdkVersion 34
     defaultConfig {
+        compileSdk 34
         applicationId "com.adyen.android.assignment"
         minSdkVersion 26
         targetSdkVersion 34
@@ -61,7 +61,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    def composeBom = platform("androidx.compose:compose-bom:2024.09.03")
+    def composeBom = platform("androidx.compose:compose-bom:2024.10.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
@@ -71,12 +71,12 @@ dependencies {
     implementation "androidx.compose.foundation:foundation"
     implementation "androidx.compose.foundation:foundation-layout"
     implementation "androidx.compose.runtime:runtime-livedata"
-    implementation "androidx.activity:activity-compose:1.9.2"
+    implementation "androidx.activity:activity-compose:1.9.3"
     implementation "androidx.compose.material3:material3"
+    implementation "androidx.compose.material:material"
 
     implementation "androidx.appcompat:appcompat:1.7.0"
     implementation "androidx.core:core-ktx:1.13.1"
-    implementation 'com.google.android.material:material:1.12.0'
 
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
@@ -95,4 +95,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0"
 
+    testImplementation 'io.mockk:mockk:1.12.2'
+
+    implementation 'io.coil-kt:coil-compose:2.4.0'
 }

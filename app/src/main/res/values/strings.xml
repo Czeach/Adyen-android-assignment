@@ -4,4 +4,15 @@
     <string name="stars">Over 200 billion stars.</string>
     <string name="gassy">It\'s really dusty and gassy.</string>
     <string name="black_hole">Black hole at the centre.</string>
+    <string name="app_bar_title">Our Universe</string>
+    <string name="refresh">Refresh</string>
+    <string name="apply">Apply</string>
+    <string name="reset">Reset</string>
+    <string name="refresh_prompt">Please refresh the page and try again</string>
+    <string name="icon_description">This is an icon</string>
+    <string name="image_description">This is an image</string>
+    <string name="latest_heading">Latest</string>
+    <string name="reorder_list">Reorder List</string>
+    <string name="reorder_by_title">Reorder by title</string>
+    <string name="reorder_by_date">Reorder by date</string>
 </resources>
