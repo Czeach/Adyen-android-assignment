@@ -41,6 +41,7 @@ import com.adyen.android.assignment.ui.states.APODListState
 @Composable
 fun APODListScreen(
     viewModel: APODListViewModel,
+    onAPODClicked: (String, String, String, String) -> Unit
 ) {
 
     val apodsState by viewModel.apodsState.collectAsState()
@@ -126,7 +127,9 @@ fun APODListScreen(
                     (apodsState as APODListState.Success).data?.let {
                         LatestAPODList(
                             apods = it,
-                            onAPODClicked = {},
+                            onAPODClicked = {title, date, explanation, url ->
+                                onAPODClicked(title, date, explanation, url)
+                            },
                             modifier = Modifier
                         )
                     }
@@ -195,7 +198,7 @@ fun PreviewAPODListItem() {
                 serviceVersion = "v1"
             ),
         ),
-        onAPODClicked = {},
+        onAPODClicked = {_, _, _, _ -> },
         modifier = Modifier
     )
 }

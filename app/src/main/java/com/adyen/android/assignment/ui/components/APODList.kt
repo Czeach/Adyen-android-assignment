@@ -30,7 +30,7 @@ import com.adyen.android.assignment.api.model.AstronomyPicture
 @Composable
 fun LatestAPODList(
     apods: List<AstronomyPicture>,
-    onAPODClicked: (String) -> Unit,
+    onAPODClicked: (String, String, String, String) -> Unit,
     modifier: Modifier
 ) {
     Column(
@@ -58,7 +58,7 @@ fun LatestAPODList(
                     modifier = Modifier
                         .padding(start = 22.dp, top = 5.dp, bottom = 5.dp),
                     apod = apod,
-                    onAPODClicked = { onAPODClicked("")}
+                    onAPODClicked = { onAPODClicked(apod.title, apod.date, apod.explanation, apod.url)}
                 )
             }
         }
@@ -73,6 +73,9 @@ private fun APODListItem(
 ) {
     Row(
         modifier = modifier
+            .clickable {
+                onAPODClicked()
+            }
     ) {
         Card(
             modifier = Modifier
@@ -87,9 +90,6 @@ private fun APODListItem(
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        onAPODClicked()
-                    }
             )
         }
         Column(
