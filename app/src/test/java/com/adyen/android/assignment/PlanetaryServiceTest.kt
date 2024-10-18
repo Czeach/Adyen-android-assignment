@@ -1,6 +1,6 @@
 package com.adyen.android.assignment
 
-import com.adyen.android.assignment.api.PlanetaryService
+import com.adyen.android.assignment.data.api.PlanetaryService
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

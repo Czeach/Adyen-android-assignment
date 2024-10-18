@@ -1,7 +1,7 @@
-package com.adyen.android.assignment.api
+package com.adyen.android.assignment.data.api
 
 import com.adyen.android.assignment.BuildConfig
-import com.adyen.android.assignment.api.model.AstronomyPicture
+import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import retrofit2.http.GET
 
 

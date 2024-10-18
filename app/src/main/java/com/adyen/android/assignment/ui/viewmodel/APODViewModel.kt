@@ -1,11 +1,13 @@
-package com.adyen.android.assignment.ui.screens.list
+package com.adyen.android.assignment.ui.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adyen.android.assignment.api.model.AstronomyPicture
+import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import com.adyen.android.assignment.data.DataState
+import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 import com.adyen.android.assignment.data.repository.APODRepository
-import com.adyen.android.assignment.ui.states.APODListState
+import com.adyen.android.assignment.ui.state.APODListState
 import com.adyen.android.assignment.utils.Utils.sortAPODSByDate
 import com.adyen.android.assignment.utils.Utils.sortAPODsByTitle
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +17,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class APODListViewModel @Inject constructor(
+class APODViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val apodRepository: APODRepository
 ): ViewModel() {
 
     init {
         getAPODs()
     }
+
+    val apodTitle = savedStateHandle.get<String>("title")
+    val apodDate = savedStateHandle.get<String>("date")
+    val apodExplanation = savedStateHandle.get<String>("explanation")
+    val apodUrl = savedStateHandle.get<String>("url")
+
+    private val _favourites = MutableStateFlow(emptyList<LocalAstronomyPicture>())
+    val favourites: StateFlow<List<LocalAstronomyPicture>> = _favourites
 
     private val _apodsState = MutableStateFlow<APODListState>(APODListState.Loading)
     val apodsState: StateFlow<APODListState> = _apodsState
@@ -33,6 +44,21 @@ class APODListViewModel @Inject constructor(
    private val _orderByDateState = MutableStateFlow(false)
     val orderByDateState: StateFlow<Boolean>
         get() = _orderByDateState
+
+    private val _favouriteState = MutableStateFlow(false)
+    val favouriteState: StateFlow<Boolean>
+        get() = _favouriteState
+
+    fun getLocalAPODs() {
+        viewModelScope.launch {
+            val favourites = apodRepository.getLocalAPODList()
+            if (favourites.isNotEmpty()) {
+                _favourites.emit(favourites)
+            } else {
+                _favourites.emit(emptyList())
+            }
+        }
+    }
 
     fun getAPODs() {
         viewModelScope.launch {
@@ -64,5 +90,31 @@ class APODListViewModel @Inject constructor(
 
     fun onOrderByDateStateChanged(value: Boolean)  {
         _orderByDateState.value = value
+    }
+
+    fun getAPODByTitle(title: String) {
+        viewModelScope.launch {
+            val localAPOD = apodRepository.getLocalAPOD(title)
+            if (localAPOD != null) {
+                _favouriteState.emit(localAPOD.isFavourite)
+
+            }
+        }
+    }
+
+    fun insertAPOD(apod: LocalAstronomyPicture) {
+        viewModelScope.launch {
+            apodRepository.insertAPOD(apod)
+        }
+    }
+
+    fun deleteAPOD(title: String) {
+        viewModelScope.launch {
+            apodRepository.deleteAPOD(title)
+        }
+    }
+
+    fun onFavouriteStateChanged(value: Boolean) {
+        _favouriteState.value = value
     }
 }

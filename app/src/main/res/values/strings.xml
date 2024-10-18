@@ -12,6 +12,7 @@
     <string name="icon_description">This is an icon</string>
     <string name="image_description">This is an image</string>
     <string name="latest_heading">Latest</string>
+    <string name="favourite_heading">My Favourites</string>
     <string name="reorder_list">Reorder List</string>
     <string name="reorder_by_title">Reorder by title</string>
     <string name="reorder_by_date">Reorder by date</string>

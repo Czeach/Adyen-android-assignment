@@ -1,8 +1,10 @@
 package com.adyen.android.assignment.data.repository
 
-import com.adyen.android.assignment.api.PlanetaryService
-import com.adyen.android.assignment.api.model.AstronomyPicture
+import com.adyen.android.assignment.data.api.PlanetaryService
+import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import com.adyen.android.assignment.data.DataState
+import com.adyen.android.assignment.data.local.APODDao
+import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 import com.adyen.android.assignment.utils.Utils.formatDateString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -12,8 +14,9 @@ import javax.inject.Inject
 
 class APODRepositoryImpl @Inject constructor(
     private val planetaryService: PlanetaryService,
-    private val dispatcher: CoroutineDispatcher
-): APODRepository {
+    private val dispatcher: CoroutineDispatcher,
+    private val apodDao: APODDao
+) : APODRepository {
     override fun getAPODs(): Flow<DataState<List<AstronomyPicture>>> {
         return flow {
             emit(DataState.loading())
@@ -30,4 +33,12 @@ class APODRepositoryImpl @Inject constructor(
             }
         }.flowOn(dispatcher)
     }
+
+    override suspend fun insertAPOD(apod: LocalAstronomyPicture) = apodDao.insertAPOD(apod)
+
+    override suspend fun getLocalAPODList() = apodDao.getAPODs()
+
+    override suspend fun getLocalAPOD(title: String) = apodDao.getAPODByTitle(title)
+
+    override suspend fun deleteAPOD(title: String) = apodDao.deleteAPOD(title)
 }

@@ -9,10 +9,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.adyen.android.assignment.ui.screens.details.APODDetailScreen
-import com.adyen.android.assignment.ui.screens.details.APODDetailViewModel
-import com.adyen.android.assignment.ui.screens.list.APODListScreen
-import com.adyen.android.assignment.ui.screens.list.APODListViewModel
+import com.adyen.android.assignment.ui.screens.APODDetailScreen
+import com.adyen.android.assignment.ui.screens.APODListScreen
+import com.adyen.android.assignment.ui.viewmodel.APODViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
@@ -27,7 +26,7 @@ fun AppNavHost(navController: NavHostController) {
         composable(
             route = Screens.APODListScreen.route
         ) {
-            val viewModel = hiltViewModel<APODListViewModel>()
+            val viewModel = hiltViewModel<APODViewModel>()
             APODListScreen(
                 viewModel = viewModel,
                 onAPODClicked = { title, date, explanation, url ->
@@ -65,7 +64,7 @@ fun AppNavHost(navController: NavHostController) {
                 )
             }
 
-            val viewModel = hiltViewModel<APODDetailViewModel>(backStackEntry)
+            val viewModel = hiltViewModel<APODViewModel>(backStackEntry)
             APODDetailScreen(
                 viewModel = viewModel,
                 onBackPressed = {

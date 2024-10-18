@@ -1,6 +1,6 @@
-package com.adyen.android.assignment.ui.states
+package com.adyen.android.assignment.ui.state
 
-import com.adyen.android.assignment.api.model.AstronomyPicture
+import com.adyen.android.assignment.data.api.model.AstronomyPicture
 
 sealed interface APODListState {
     data class Success(val data: List<AstronomyPicture>?): APODListState

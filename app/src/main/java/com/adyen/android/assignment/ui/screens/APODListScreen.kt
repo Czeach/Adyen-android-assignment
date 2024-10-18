@@ -1,9 +1,11 @@
-package com.adyen.android.assignment.ui.screens.list
+package com.adyen.android.assignment.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,32 +27,38 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adyen.android.assignment.R
-import com.adyen.android.assignment.api.model.AstronomyPicture
+import com.adyen.android.assignment.data.api.model.AstronomyPicture
+import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
+import com.adyen.android.assignment.ui.components.FavouriteAPODList
 import com.adyen.android.assignment.ui.components.LatestAPODList
 import com.adyen.android.assignment.ui.components.ReorderDialog
-import com.adyen.android.assignment.ui.screens.ErrorScreen
-import com.adyen.android.assignment.ui.states.APODListState
+import com.adyen.android.assignment.ui.state.APODListState
+import com.adyen.android.assignment.ui.viewmodel.APODViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun APODListScreen(
-    viewModel: APODListViewModel,
+    viewModel: APODViewModel,
     onAPODClicked: (String, String, String, String) -> Unit
 ) {
 
     val apodsState by viewModel.apodsState.collectAsState()
+    val favourites by viewModel.favourites.collectAsState()
 
-    val orderByTitleState = viewModel.orderByTitleState.collectAsState()
-    val orderByDateState = viewModel.orderByDateState.collectAsState()
+    val orderByTitleState by viewModel.orderByTitleState.collectAsState()
+    val orderByDateState by viewModel.orderByDateState.collectAsState()
 
     var dialogVisibility by rememberSaveable { mutableStateOf(false) }
     val showDialog = apodsState is APODListState.Success && dialogVisibility
+
+    viewModel.getLocalAPODs()
 
     Scaffold(
         topBar = {
@@ -110,56 +118,105 @@ fun APODListScreen(
                 .padding(padding)
                 .padding(horizontal = 6.dp)
         ) {
-            when (apodsState) {
-                is APODListState.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+            HandleAPODsState(
+                viewModel = viewModel,
+                apodsState = apodsState,
+                favourites = favourites,
+                onAPODClicked = { title, date, explanation, url ->
+                    onAPODClicked(title, date, explanation, url)
+                },
+                showDialog = showDialog,
+                dialogVisibility = {
+                    dialogVisibility = it
+                },
+                orderByTitleState = orderByTitleState,
+                orderByDateState = orderByDateState
+            )
+        }
+    }
+}
 
+@Composable
+private fun HandleAPODsState(
+    viewModel: APODViewModel,
+    apodsState: APODListState,
+    favourites: List<LocalAstronomyPicture>,
+    onAPODClicked: (String, String, String, String) -> Unit,
+    showDialog: Boolean,
+    dialogVisibility: (Boolean) -> Unit,
+    orderByTitleState: Boolean,
+    orderByDateState: Boolean,
+) {
+    when (apodsState) {
+        is APODListState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                )
+
+            }
+        }
+
+        is APODListState.Success -> {
+            apodsState.data?.let {
+                Column {
+                    val configuration = LocalConfiguration.current
+                    val screenHeight = configuration.screenHeightDp
+                    when (favourites.isNotEmpty()) {
+                        true -> {
+                            FavouriteAPODList(
+                                apods = favourites,
+                                onAPODClicked = { title, date, explanation, url ->
+                                    onAPODClicked(title, date, explanation, url)
+                                },
+                                modifier = Modifier
+                                    .heightIn(max = (screenHeight / 3.5).dp)
+                            )
+                        }
+
+                        else -> {}
                     }
-                }
-                is APODListState.Success -> {
-                    (apodsState as APODListState.Success).data?.let {
-                        LatestAPODList(
-                            apods = it,
-                            onAPODClicked = {title, date, explanation, url ->
-                                onAPODClicked(title, date, explanation, url)
-                            },
-                            modifier = Modifier
-                        )
-                    }
-                    if (showDialog) {
-                        ReorderDialog(
-                            setOrderByTitle = {
-                                viewModel.onOrderByTitleStateChanged(it)
-                            },
-                            setOrderByDate = {
-                                viewModel.onOrderByDateStateChanged(it)
-                            },
-                            setDialogVisibility = { dialogVisibility = it },
-                            orderByTitleState = orderByTitleState.value,
-                            orderByDateState = orderByDateState.value,
-                            onApply = {
-                                viewModel.getAPODs()
-                            }
-                        )
-                    }
-                }
-                is APODListState.Error -> {
-                    ErrorScreen(
-                        message = (apodsState as APODListState.Error).message.toString(),
-                        onRefresh = {
-                            viewModel.getAPODs()
+
+                    LatestAPODList(
+                        apods = it,
+                        onAPODClicked = { title, date, explanation, url ->
+                            onAPODClicked(title, date, explanation, url)
                         },
                         modifier = Modifier
                     )
                 }
+
             }
+            if (showDialog) {
+                ReorderDialog(
+                    setOrderByTitle = {
+                        viewModel.onOrderByTitleStateChanged(it)
+                    },
+                    setOrderByDate = {
+                        viewModel.onOrderByDateStateChanged(it)
+                    },
+                    setDialogVisibility = { dialogVisibility(it) },
+                    orderByTitleState = orderByTitleState,
+                    orderByDateState = orderByDateState,
+                    onApply = {
+                        viewModel.getAPODs()
+                    }
+                )
+            }
+        }
+
+        is APODListState.Error -> {
+            ErrorScreen(
+                message = apodsState.message.toString(),
+                onRefresh = {
+                    viewModel.getAPODs()
+                },
+                modifier = Modifier
+            )
         }
     }
 }
@@ -198,7 +255,7 @@ fun PreviewAPODListItem() {
                 serviceVersion = "v1"
             ),
         ),
-        onAPODClicked = {_, _, _, _ -> },
+        onAPODClicked = { _, _, _, _ -> },
         modifier = Modifier
     )
 }
