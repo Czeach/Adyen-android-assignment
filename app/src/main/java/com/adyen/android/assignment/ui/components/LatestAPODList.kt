@@ -50,7 +50,14 @@ fun LatestAPODList(
                     title = apod.title,
                     imageUrl = apod.url,
                     date = apod.date,
-                    onAPODClicked = { onAPODClicked(apod.title, apod.date, apod.explanation, apod.url)}
+                    onAPODClicked = {
+                        onAPODClicked(
+                            apod.title,
+                            apod.date,
+                            apod.explanation,
+                            apod.url
+                        )
+                    }
                 )
             }
         }

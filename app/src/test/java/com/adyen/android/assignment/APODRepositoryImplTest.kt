@@ -1,8 +1,8 @@
 package com.adyen.android.assignment
 
+import com.adyen.android.assignment.data.DataState
 import com.adyen.android.assignment.data.api.PlanetaryService
 import com.adyen.android.assignment.data.api.model.AstronomyPicture
-import com.adyen.android.assignment.data.DataState
 import com.adyen.android.assignment.data.local.APODDao
 import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 import com.adyen.android.assignment.data.repository.APODRepository
@@ -55,7 +55,8 @@ class APODRepositoryImplTest {
     fun setUp() {
         mockPlanetaryService = mockk<PlanetaryService>()
         mockAPODDao = mockk<APODDao>()
-        apodRepository = APODRepositoryImpl(mockPlanetaryService, coroutinesRule.testDispatcher, mockAPODDao)
+        apodRepository =
+            APODRepositoryImpl(mockPlanetaryService, coroutinesRule.testDispatcher, mockAPODDao)
     }
 
     @After
@@ -89,8 +90,8 @@ class APODRepositoryImplTest {
         }
 
     @Test
-    fun `getAPODs() emits error state with message when network call fails with exception message`() =
-        runTest {
+    fun `getAPODs() emits error state with message when network call fails with exception message`()
+    = runTest {
             val exception = Exception("Error fetching pictures")
             coEvery { mockPlanetaryService.getPictures() } throws exception
 
@@ -136,7 +137,9 @@ class APODRepositoryImplTest {
 
     @Test
     fun `getLocalAPOD() returns the correct APOD`() = runTest {
-        coEvery { mockAPODDao.getAPODByTitle(mockLocalResponse[0].title) } returns mockLocalResponse[0]
+        coEvery {
+            mockAPODDao.getAPODByTitle(mockLocalResponse[0].title)
+        } returns mockLocalResponse[0]
 
         val result = apodRepository.getLocalAPOD(mockLocalResponse[0].title)
 

@@ -1,12 +1,12 @@
 package com.adyen.android.assignment
 
 import androidx.lifecycle.SavedStateHandle
-import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import com.adyen.android.assignment.data.DataState
+import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 import com.adyen.android.assignment.data.repository.APODRepository
-import com.adyen.android.assignment.ui.viewmodel.APODViewModel
 import com.adyen.android.assignment.ui.state.APODListState
+import com.adyen.android.assignment.ui.viewmodel.APODViewModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -72,8 +72,14 @@ class APODViewModelTest {
     fun `savedStateHandle returns appropriate values`() {
         assertEquals("The Extraordinary Spiral in LL Pegasi", viewModel.apodTitle)
         assertEquals("2023-01-01", viewModel.apodDate)
-        assertEquals("hat created the strange spiral structure on the upper left? ...", viewModel.apodExplanation)
-        assertEquals("https://apod.nasa.gov/apod/image/1510/PlutoMoons_NewHorizons_1080.jpg", viewModel.apodUrl)
+        assertEquals(
+            "hat created the strange spiral structure on the upper left? ...",
+            viewModel.apodExplanation
+        )
+        assertEquals(
+            "https://apod.nasa.gov/apod/image/1510/PlutoMoons_NewHorizons_1080.jpg",
+            viewModel.apodUrl
+        )
     }
 
     @Test
@@ -97,7 +103,7 @@ class APODViewModelTest {
         runTest {
             val exception = Exception("Error fetching pictures")
             val dataState = DataState.error<List<AstronomyPicture>>(message = exception.message!!)
-            coEvery { mockAPODRepository.getAPODs() } returns  flow { emit(dataState) }
+            coEvery { mockAPODRepository.getAPODs() } returns flow { emit(dataState) }
 
             viewModel.getAPODs()
 
@@ -106,7 +112,9 @@ class APODViewModelTest {
 
     @Test
     fun `favouriteState is true when getAPODByTitle() returns picture object`() = runTest {
-        coEvery { mockAPODRepository.getLocalAPOD(mockLocalResponse[0].title) } returns mockLocalResponse[0]
+        coEvery {
+            mockAPODRepository.getLocalAPOD(mockLocalResponse[0].title)
+        } returns mockLocalResponse[0]
 
         viewModel.getAPODByTitle(mockLocalResponse[0].title)
 

@@ -127,7 +127,12 @@ fun APODDetailScreen(
                         },
                         content = {
                             Icon(
-                                painter = if (favouriteState) painterResource(R.drawable.ic_favorite_filled) else painterResource(R.drawable.ic_favorite_border),
+                                painter = if (favouriteState) painterResource(
+                                    R.drawable.ic_favorite_filled
+                                )
+                                else painterResource(
+                                    R.drawable.ic_favorite_border
+                                ),
                                 contentDescription = stringResource(R.string.icon_description),
                                 tint = MaterialTheme.colorScheme.secondary,
                             )
@@ -163,6 +168,7 @@ private fun handleFavouriteState(viewModel: APODViewModel, favouriteState: Boole
                 )
             )
         }
+
         else -> {
             viewModel.deleteAPOD(viewModel.apodTitle.toString())
         }

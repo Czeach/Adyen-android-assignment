@@ -41,7 +41,8 @@ fun AppNavHost(navController: NavHostController) {
             )
         }
         composable(
-            route = Screens.APODDetailScreen.route + "/{title}" + "/{date}" + "/{explanation}" + "/{url}",
+            route = Screens.APODDetailScreen.route
+                    + "/{title}" + "/{date}" + "/{explanation}" + "/{url}",
             arguments = listOf(
                 navArgument("title") {
                     type = NavType.StringType
