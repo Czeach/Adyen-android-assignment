@@ -55,7 +55,7 @@ fun ErrorScreen(
             Text(
                 text = message,
                 color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineMedium
             )
             Spacer(
                 modifier = Modifier

@@ -1,6 +1,7 @@
 package com.adyen.android.assignment.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -42,7 +43,8 @@ fun FavouriteAPODList(
             ) { apod ->
                 APODListItem(
                     modifier = Modifier
-                        .padding(start = 22.dp, top = 5.dp, bottom = 5.dp),
+                        .padding(start = 22.dp, top = 5.dp, bottom = 5.dp)
+                        .fillMaxWidth(),
                     title = apod.title,
                     imageUrl = apod.url,
                     date = apod.date,

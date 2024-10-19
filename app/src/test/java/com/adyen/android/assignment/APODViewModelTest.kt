@@ -70,10 +70,10 @@ class APODViewModelTest {
 
     @Test
     fun `savedStateHandle returns appropriate values`() {
-        assertEquals(viewModel.apodTitle, "The Extraordinary Spiral in LL Pegasi")
-        assertEquals(viewModel.apodDate, "2023-01-01")
-        assertEquals(viewModel.apodExplanation, "hat created the strange spiral structure on the upper left? ...")
-        assertEquals(viewModel.apodUrl, "https://apod.nasa.gov/apod/image/1510/PlutoMoons_NewHorizons_1080.jpg")
+        assertEquals("The Extraordinary Spiral in LL Pegasi", viewModel.apodTitle)
+        assertEquals("2023-01-01", viewModel.apodDate)
+        assertEquals("hat created the strange spiral structure on the upper left? ...", viewModel.apodExplanation)
+        assertEquals("https://apod.nasa.gov/apod/image/1510/PlutoMoons_NewHorizons_1080.jpg", viewModel.apodUrl)
     }
 
     @Test
@@ -105,21 +105,31 @@ class APODViewModelTest {
         }
 
     @Test
-    fun `favouriteState is true when database returns picture object`() = runTest {
+    fun `favouriteState is true when getAPODByTitle() returns picture object`() = runTest {
         coEvery { mockAPODRepository.getLocalAPOD(mockLocalResponse[0].title) } returns mockLocalResponse[0]
 
         viewModel.getAPODByTitle(mockLocalResponse[0].title)
 
-        assertEquals(viewModel.favouriteState.value, true)
+        assertEquals(true, viewModel.favouriteState.value)
     }
 
     @Test
-    fun `favouriteState is false when database returns null`() = runTest {
-        coEvery { mockAPODRepository.getLocalAPOD(mockLocalResponse[0].title) } returns null
+    fun `favourites emits empty list when getLocalAPODList() returns empty list`() = runTest {
+        coEvery { mockAPODRepository.getLocalAPODList() } returns emptyList()
 
-        viewModel.getAPODByTitle(mockLocalResponse[0].title)
+        viewModel.getLocalAPODs()
 
-        assertEquals(viewModel.favouriteState.value, false)
+        assertEquals(emptyList<LocalAstronomyPicture>(), viewModel.favourites.value)
+    }
+
+    @Test
+    fun `favouriteState emits list when getLocalAPODList() returns non-empty list`() = runTest {
+        coEvery { mockAPODRepository.getLocalAPODList() } returns mockLocalResponse
+
+        viewModel.getLocalAPODs()
+
+        assertEquals(mockLocalResponse, viewModel.favourites.value)
+        assertEquals(1, viewModel.favourites.value.size)
     }
 
     @Test
