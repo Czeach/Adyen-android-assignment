@@ -16,7 +16,7 @@ import com.adyen.android.assignment.R
 import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 
 @Composable
-fun FavouriteAPODList(
+internal fun FavouriteAPODList(
     apods: List<LocalAstronomyPicture>,
     onAPODClicked: (String, String, String, String) -> Unit,
     modifier: Modifier

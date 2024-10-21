@@ -28,7 +28,7 @@ import com.adyen.android.assignment.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReorderDialog(
+internal fun ReorderDialog(
     onApply: () -> Unit,
     setOrderByTitle: (Boolean) -> Unit,
     setOrderByDate: (Boolean) -> Unit,

@@ -21,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,32 +35,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.adyen.android.assignment.R
 import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 import com.adyen.android.assignment.ui.components.FavouriteAPODList
 import com.adyen.android.assignment.ui.components.LatestAPODList
 import com.adyen.android.assignment.ui.components.ReorderDialog
-import com.adyen.android.assignment.ui.state.APODListState
 import com.adyen.android.assignment.ui.viewmodel.APODViewModel
+import com.adyen.android.assignment.ui.viewmodel.state.APODListState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun APODListScreen(
+internal fun APODListScreen(
     viewModel: APODViewModel,
     onAPODClicked: (String, String, String, String) -> Unit
 ) {
 
-    val apodsState by viewModel.apodsState.collectAsState()
-    val favourites by viewModel.favourites.collectAsState()
+    val apodsState by viewModel.apodsState.collectAsStateWithLifecycle()
+    val favourites by viewModel.favourites.collectAsStateWithLifecycle()
 
-    val orderByTitleState by viewModel.orderByTitleState.collectAsState()
-    val orderByDateState by viewModel.orderByDateState.collectAsState()
+    val orderByTitleState by viewModel.orderByTitleState.collectAsStateWithLifecycle()
+    val orderByDateState by viewModel.orderByDateState.collectAsStateWithLifecycle()
 
     var dialogVisibility by rememberSaveable { mutableStateOf(false) }
     val showDialog = apodsState is APODListState.Success && dialogVisibility
-
-    viewModel.getLocalAPODs()
 
     Scaffold(
         topBar = {
@@ -176,6 +174,7 @@ private fun HandleAPODsState(
         }
 
         is APODListState.Success -> {
+            viewModel.getLocalAPODs()
             apodsState.data?.let {
                 Column {
                     val configuration = LocalConfiguration.current
@@ -191,7 +190,6 @@ private fun HandleAPODsState(
                                     .heightIn(max = (screenHeight / 3.5).dp)
                             )
                         }
-
                         else -> {}
                     }
 
@@ -217,7 +215,7 @@ private fun HandleAPODsState(
                     orderByTitleState = orderByTitleState,
                     orderByDateState = orderByDateState,
                     onApply = {
-                        viewModel.getAPODs()
+                        viewModel.reOrderList()
                     }
                 )
             }
@@ -238,7 +236,7 @@ private fun HandleAPODsState(
 
 @Preview
 @Composable
-fun PreviewAPODListItem() {
+private fun PreviewAPODListItem() {
     LatestAPODList(
         apods = listOf(
             AstronomyPicture(

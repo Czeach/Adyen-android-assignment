@@ -1,6 +1,6 @@
 package com.adyen.android.assignment.data
 
-data class DataState<T>(
+internal data class DataState<T>(
     val message: String? = null,
     val data: T? = null,
     val isLoading: Boolean = false,

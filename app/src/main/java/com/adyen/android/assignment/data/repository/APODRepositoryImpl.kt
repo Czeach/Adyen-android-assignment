@@ -10,9 +10,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class APODRepositoryImpl @Inject constructor(
+internal class APODRepositoryImpl @Inject constructor(
     private val planetaryService: PlanetaryService,
     private val dispatcher: CoroutineDispatcher,
     private val apodDao: APODDao
@@ -34,11 +35,19 @@ class APODRepositoryImpl @Inject constructor(
         }.flowOn(dispatcher)
     }
 
-    override suspend fun insertAPOD(apod: LocalAstronomyPicture) = apodDao.insertAPOD(apod)
+    override suspend fun insertAPOD(apod: LocalAstronomyPicture) = withContext(dispatcher) {
+        apodDao.insertAPOD(apod)
+    }
 
-    override suspend fun getLocalAPODList() = apodDao.getAPODs()
+    override suspend fun getLocalAPODList() = withContext(dispatcher) {
+        apodDao.getAPODs()
+    }
 
-    override suspend fun getLocalAPOD(title: String) = apodDao.getAPODByTitle(title)
+    override suspend fun getLocalAPOD(title: String) = withContext(dispatcher) {
+        apodDao.getAPODByTitle(title)
+    }
 
-    override suspend fun deleteAPOD(title: String) = apodDao.deleteAPOD(title)
+    override suspend fun deleteAPOD(title: String) = withContext(dispatcher) {
+        apodDao.deleteAPOD(title)
+    }
 }

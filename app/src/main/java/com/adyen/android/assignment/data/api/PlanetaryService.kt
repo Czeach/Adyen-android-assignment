@@ -4,7 +4,6 @@ import com.adyen.android.assignment.BuildConfig
 import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import retrofit2.http.GET
 
-
 interface PlanetaryService {
     /**
      * APOD - Astronomy Picture of the day.

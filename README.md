@@ -39,3 +39,23 @@ We are interested in:
 **OPTIONAL**
 * Allow user to save/persist APODs that they like and pin them to the top of the summary list screen.
 * The UI/UX is not a strict requirement, feel free to make it pixel perfect with animations if you please.
+
+
+
+## Notes:
+- I employed the Model-View-ViewModel (MVVM) architecture to separate concerns and enhance testability.
+- The data flow is unidirectional, making sure that the UI observes the ViewModel for changes in state.
+- I used Coroutines and Flow for asynchronous operations, enabling smooth background
+    operations and real-time data updates without blocking the UI.
+- Hilt was used for dependency injection to simplify the management of dependencies.
+- I integrated Room as the local database for persisting data.
+- I used MockK library to create mocks of classes for testing.
+
+Possible Enhancements:
+- In my current implementation of APODViewModel, I am launching an asynchronous operation in the
+  init block of the viewmodel. This is not the most ideal solution as it can lead to issues if the call
+  tries to update the object before it is fully initialized, but was adopted due to time constraints
+  of the task. If I had more time I would device a more effective approach to trigger the data
+  fetching operation.
+- If I had more time, I would increase unit tests coverage and implement UI tests and instrumentation
+    tests for the database to ensure comprehensive testing coverage and reliability of the app.

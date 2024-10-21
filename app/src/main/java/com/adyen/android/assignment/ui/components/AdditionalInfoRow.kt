@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.adyen.android.assignment.R
 
 @Composable
-fun AdditionalInfoRow(iconRes: Int, text: String) {
+internal fun AdditionalInfoRow(iconRes: Int, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

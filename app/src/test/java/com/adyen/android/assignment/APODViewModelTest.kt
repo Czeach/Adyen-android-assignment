@@ -5,7 +5,7 @@ import com.adyen.android.assignment.data.DataState
 import com.adyen.android.assignment.data.api.model.AstronomyPicture
 import com.adyen.android.assignment.data.local.model.LocalAstronomyPicture
 import com.adyen.android.assignment.data.repository.APODRepository
-import com.adyen.android.assignment.ui.state.APODListState
+import com.adyen.android.assignment.ui.viewmodel.state.APODListState
 import com.adyen.android.assignment.ui.viewmodel.APODViewModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery

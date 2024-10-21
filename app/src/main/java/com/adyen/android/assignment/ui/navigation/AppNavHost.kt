@@ -14,7 +14,7 @@ import com.adyen.android.assignment.ui.screens.APODListScreen
 import com.adyen.android.assignment.ui.viewmodel.APODViewModel
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+internal fun AppNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Screens.APODListScreen.route

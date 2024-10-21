@@ -26,7 +26,7 @@ import com.adyen.android.assignment.R
 
 
 @Composable
-fun ErrorScreen(
+internal fun ErrorScreen(
     message: String,
     onRefresh: () -> Unit,
     modifier: Modifier

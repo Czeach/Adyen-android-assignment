@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
 import com.adyen.android.assignment.R
 
 @Composable
-fun APODListItem(
+internal fun APODListItem(
     modifier: Modifier,
     title: String,
     imageUrl: String,

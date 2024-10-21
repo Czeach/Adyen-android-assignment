@@ -11,7 +11,7 @@ import com.adyen.android.assignment.ui.theme.APODTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity(){
+internal class MainActivity : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity(){
 }
 
 @Composable
-fun APODApp() {
+internal fun APODApp() {
     APODTheme {
         val navController = rememberNavController()
         AppNavHost(

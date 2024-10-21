@@ -17,7 +17,7 @@ import com.adyen.android.assignment.R
 import com.adyen.android.assignment.data.api.model.AstronomyPicture
 
 @Composable
-fun LatestAPODList(
+internal fun LatestAPODList(
     apods: List<AstronomyPicture>,
     onAPODClicked: (String, String, String, String) -> Unit,
     modifier: Modifier

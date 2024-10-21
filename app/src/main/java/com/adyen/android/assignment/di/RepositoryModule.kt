@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @[Module InstallIn(SingletonComponent::class)]
-abstract class RepositoryModule {
+internal abstract class RepositoryModule {
 
     @[Binds Singleton]
     abstract fun provideAPODRepositoryImpl(
